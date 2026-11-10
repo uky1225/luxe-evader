@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>LUXE : 보랏빛 저택</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=Press+Start+2P&display=swap');
+:root{--violet:#a78bd1;--ink:#100d18;--panel:#21182b;--line:#80669c}
+*{box-sizing:border-box}body{margin:0;background:#090710;color:#eee;font-family:'Gowun Batang',serif;overflow:hidden}
+#game{position:relative;width:100vw;height:100dvh;min-height:420px;background:#100d18;display:flex;align-items:center;justify-content:center}
+canvas{width:min(100vw,177.78vh);height:min(56.25vw,100dvh);max-height:100dvh;image-rendering:pixelated;background:#171421;box-shadow:0 0 50px #6d4c8a55}
+#hud{position:absolute;inset:0;pointer-events:none;margin:auto;width:min(100vw,177.78vh);height:min(56.25vw,100dvh);max-height:100dvh}
+#mapFrame{position:absolute;right:1.5%;top:2%;width:15%;aspect-ratio:1;background:url('data:image/png;base64,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') center/100% 100% no-repeat;filter:drop-shadow(0 0 7px #b38be8aa)}
+#map{position:absolute;inset:12%;width:76%;height:76%;image-rendering:pixelated}
+#status{position:absolute;left:2%;top:2%;padding:9px 12px;background:#130e1ddd;border:1px solid #775b8c;border-radius:4px;font-size:clamp(10px,1.3vw,15px);line-height:1.7;min-width:145px}
+#hint{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);padding:9px 16px;background:#100b19e8;border:1px solid #8b70a6;border-radius:4px;font-size:clamp(11px,1.4vw,16px);white-space:nowrap;opacity:0;transition:.2s}
+#hint.show{opacity:1}
+#controls{position:absolute;bottom:3%;left:2%;display:none;pointer-events:auto;gap:5px;align-items:center}
+.pad{display:grid;grid-template-columns:repeat(3,38px);grid-template-rows:repeat(2,34px);gap:3px}
+.pad button,.act button{background:#291d37cc;color:#eee;border:1px solid #987bb1;border-radius:6px;font-size:17px;touch-action:none}
+.pad button:nth-child(1){grid-column:2}.pad button:nth-child(2){grid-column:1;grid-row:2}.pad button:nth-child(3){grid-column:2;grid-row:2}.pad button:nth-child(4){grid-column:3;grid-row:2}
+.act{display:flex;gap:4px;margin-left:5px}.act button{width:42px;height:42px;font-size:12px}
+#overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#080610e9;pointer-events:auto}
+.card{width:min(600px,90%);max-height:88%;overflow:auto;padding:25px;background:linear-gradient(145deg,#291d35,#130f1d);border:2px solid #8c70a7;box-shadow:0 0 35px #8e68bb55;text-align:center}
+h1{font-family:'Press Start 2P',monospace;font-size:clamp(19px,4vw,34px);line-height:1.7;color:#d5b9fa;text-shadow:3px 3px #543a68;margin:8px 0 16px}
+h2{color:#d9c3f0;margin-top:0}.subtitle{color:#b7a6c8;line-height:1.8}
+button.main{background:#795a98;border:1px solid #d0b4ec;color:white;padding:12px 24px;margin:8px;border-radius:3px;font: bold 15px 'Gowun Batang';cursor:pointer}
+button.main:hover{background:#9872b7}
+#dialog{display:none;position:absolute;inset:0;align-items:center;justify-content:center;background:#080610a8;pointer-events:auto}
+.dialogbox{width:min(520px,90%);background:#21182b;border:2px solid #9878b4;padding:20px;box-shadow:0 0 25px #000}
+#dialogText{line-height:1.8;white-space:pre-line}.choices{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px;justify-content:center}
+input{background:#100d18;border:1px solid #8b70a6;color:white;padding:10px;width:100%;font-size:18px;text-align:center;letter-spacing:4px}
+#toast{position:absolute;top:24%;left:50%;transform:translateX(-50%);background:#21182bf0;border:1px solid #b79bd3;padding:9px 16px;opacity:0;transition:.25s;pointer-events:none}
+#toast.on{opacity:1}
+@media(pointer:coarse){#controls{display:flex}#status{font-size:10px}}
+</style></head><body><div id="game"><canvas id="screen" width="960" height="540"></canvas>
+<div id="hud"><div id="status">LUXE<br><span id="floor">지하 · 감금실</span><br>체력 <span id="hp">♥♥♥</span><br>정신력 <span id="mind">100</span></div>
+<div id="mapFrame"><canvas id="map" width="100" height="100"></canvas></div>
+<div id="hint"></div><div id="controls"><div class="pad"><button data-dir="up">▲</button><button data-dir="left">◀</button><button data-dir="down">▼</button><button data-dir="right">▶</button></div><div class="act"><button data-key="f">F<br>조사</button><button data-key="e">E<br>가방</button><button data-key="r">R<br>도구</button></div></div></div>
+<div id="overlay"><div class="card" id="titleCard"><h1>LUXE</h1><h2>보랏빛 저택</h2><p class="subtitle">폭풍우가 몰아치는 밤, 길 끝에 서 있는 오래된 대저택.<br>그 안에서 사라진 아이들의 흔적을 찾아라.</p><p style="color:#9b87ad;font-size:13px">2D 픽셀 퍼즐 어드벤처 · 공포 / 미스터리</p><button class="main" id="start">게임 시작</button><p class="subtitle" style="font-size:12px">이동 WASD / 방향키 · 조사 F · 가방 E · 멀티툴 R</p></div></div>
+<div id="dialog"><div class="dialogbox"><div id="dialogText"></div><div id="dialogExtra"></div><div class="choices" id="choices"></div></div></div><div id="toast"></div>
+</div>
+<script>
+const c=document.getElementById('screen'),ctx=c.getContext('2d'),mc=document.getElementById('map').getContext('2d');
+const mapImg=new Image();mapImg.src='data:image/png;base64,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';
+const keys={}, rooms=[
+{name:'지하 · 감금실',floor:'지하',desc:'곰팡내가 진동하는 감금실. 손목의 밧줄부터 풀어야 한다.',items:['멀티툴'],objects:[['rope',480,300,'묶인 밧줄'],['shelf',190,220,'낡은 책장'],['door',850,270,'곰팡이 핀 문']]},
+{name:'지하 · 보일러실',floor:'지하',desc:'오래된 보일러와 배관. 누군가 최근에 손댄 흔적이 있다.',items:['작은 열쇠'],objects:[['boiler',470,245,'보일러'],['box',720,340,'잠긴 공구함'],['stairs',850,270,'계단']]},
+{name:'1층 · 거실',floor:'1층',desc:'먼지가 쌓인 거실. 벽난로 위 가족사진의 얼굴은 모두 긁혀 있다.',items:['사진 조각'],objects:[['fire',240,230,'벽난로'],['portrait',520,170,'가족사진'],['door',850,270,'복도 문']]},
+{name:'1층 · 서재',floor:'1층',desc:'책들이 빼곡하다. 책등의 색이 일정한 순서로 배열되어 있다.',items:['황동 열쇠'],objects:[['books',330,210,'책장 퍼즐'],['desk',650,320,'책상'],['door',850,270,'복도 문']]},
+{name:'1층 · 주방',floor:'1층',desc:'식탁 위에는 누군가 급히 먹다 남긴 흔적이 있다.',items:['에너지바'],objects:[['cabinet',270,230,'찬장'],['table',590,320,'식탁'],['door',850,270,'복도 문']]},
+{name:'1층 · 아이 방',floor:'1층',desc:'아이의 키를 표시한 자국이 벽에 남아 있다.',items:['영원 펜'],objects:[['toy',280,340,'장난감 상자'],['wall',650,190,'키 표시'],['door',850,270,'복도 문']]},
+{name:'1층 · 화장실',floor:'1층',desc:'수도꼭지에서 물이 한 방울씩 떨어진다.',items:['석수'],objects:[['mirror',420,190,'거울'],['sink',650,320,'세면대'],['door',850,270,'복도 문']]},
+{name:'2층 · 음악실',floor:'2층',desc:'피아노 건반 몇 개만 유난히 깨끗하다.',items:['은색 열쇠'],objects:[['piano',460,300,'피아노'],['clock',700,180,'벽시계'],['door',850,270,'복도 문']]},
+{name:'2층 · 침실',floor:'2층',desc:'침대는 정돈되어 있고 협탁에는 일지가 놓여 있다.',items:['일지'],objects:[['bed',300,300,'침대'],['diary',650,220,'일지'],['door',850,270,'복도 문']]},
+{name:'2층 · 연구실',floor:'2층',desc:'최근까지 사용된 듯한 연구실. 실험 기록이 남아 있다.',items:['권총'],objects:[['machine',380,260,'실험 장치'],['cabinet',680,320,'철제 캐비닛'],['door',850,270,'복도 문']]},
+{name:'2층 · 화장실',floor:'2층',desc:'거울에 손바닥 자국이 안쪽에서 찍혀 있다.',items:['지하 열쇠'],objects:[['mirror',450,210,'거울'],['drain',650,350,'배수구'],['door',850,270,'복도 문']]}
+];
+let room=0,player={x:480,y:390,speed:2.5},inventory=[],tools=['십자 드라이버','칼','톱','육각 드라이버'],tool=0,hp=3,mind=100,flags={},dialogOpen=false,game=false,frame=0,ghostTimer=0;
+const $=id=>document.getElementById(id);
+function toast(t){$('toast').textContent=t;$('toast').classList.add('on');setTimeout(()=>$('toast').classList.remove('on'),2100)}
+function addItem(n){if(!inventory.includes(n)){inventory.push(n);const tips={'멀티툴':'사용법: R키로 십자 드라이버·칼·톱·육각 드라이버를 선택합니다. 선택한 도구로 주변 장치를 조사하세요.','작은 열쇠':'사용법: 잠긴 상자나 문 가까이에서 F키를 눌러 열 수 있는지 확인하세요.','석수':'사용법: E키 가방에서 석수 마시기를 선택하면 정신력이 회복됩니다.','에너지바':'사용법: E키 가방에서 에너지바 사용을 선택하면 체력과 정신력이 회복됩니다.','영원 펜':'사용법: 노트와 함께 단서를 기록할 때 쓰는 펜입니다.','사진 조각':'사용법: 다른 사진 조각이나 기록과 대조해 단서를 완성하세요.','황동 열쇠':'사용법: 열쇠가 맞는 잠금장치 근처에서 F키로 사용합니다.','은색 열쇠':'사용법: 위층의 잠긴 문이나 수납장을 열 때 사용합니다.','일지':'사용법: E키 가방에서 소지품과 단서를 확인할 때 일지 내용을 다시 읽을 수 있습니다.','권총':'사용법: 특수한 존재의 능력을 봉인하는 단발 권총입니다. 꼭 필요한 순간까지 아껴 두세요.','지하 열쇠':'사용법: 저택의 잠긴 지하 통로 앞에서 F키를 누르세요.'};say('아이템 획득: '+n+'\n\n'+(tips[n]||'사용법: E키를 눌러 가방에서 아이템과 단서를 확인하세요.'));}}
+function say(text,buttons=[['확인',closeDialog]]){$('dialogText').textContent=text;$('dialogExtra').innerHTML='';$('choices').innerHTML='';buttons.forEach(([label,fn])=>{let b=document.createElement('button');b.className='main';b.textContent=label;b.onclick=fn;$('choices').appendChild(b)});$('dialog').style.display='flex';dialogOpen=true}
+function closeDialog(){$('dialog').style.display='none';dialogOpen=false}
+function puzzle(title,text,answer,success){$('dialogText').textContent=title+'\n'+text;$('dialogExtra').innerHTML='<input id="answer" maxlength="12" placeholder="정답 입력">';$('choices').innerHTML='';let b=document.createElement('button');b.className='main';b.textContent='확인';b.onclick=()=>{let v=$('answer').value.trim().toLowerCase();if(v===answer.toLowerCase()){closeDialog();success()}else toast('아직 맞지 않는 것 같다…')};$('choices').append(b);let x=document.createElement('button');x.className='main';x.textContent='취소';x.onclick=closeDialog;$('choices').append(x);$('dialog').style.display='flex';dialogOpen=true}
+function interact(){if(dialogOpen)return;let r=rooms[room],near=r.objects.map(o=>({...{o},d:Math.hypot(player.x-o[1],player.y-o[2])})).sort((a,b)=>a.d-b.d)[0];if(!near||near.d>100){toast('주변에는 조사할 것이 없다.');return}let [id,x,y,name]=near.o;
+if(room===0&&id==='rope'){if(!flags.rope){flags.rope=true;say('Luxe: …밧줄이 느슨해졌다. 손목을 비틀어 풀 수 있겠어.\n\n멀티툴을 이용해 밧줄을 끊었다.');addItem('멀티툴')}else toast('이미 풀린 밧줄이다.');return}
+if(room===0&&id==='shelf'){say('책장 뒤쪽에서 아이의 목소리가 들린다.\n귀신 아이: “문은 잠겨 있어. 보일러실에 열쇠가 있을 거야.”');return}
+if(room===0&&id==='door'){if(flags.rope){room=1;player.x=80;toast('보일러실로 이동했다.')}else toast('먼저 밧줄을 풀어야 한다.');return}
+if(room===1&&id==='boiler'){puzzle('보일러 밸브','벽에 적힌 숫자: 2 · 4 · 6 · ?\n규칙을 찾아 다음 숫자를 입력하자.','8',()=>{flags.boiler=true;addItem('작은 열쇠');say('밸브가 돌아가며 보일러 뒤의 작은 열쇠가 떨어졌다.')});return}
+if(room===1&&id==='box'){if(inventory.includes('작은 열쇠')){flags.box=true;addItem('석수');say('공구함 안에서 물병을 찾았다.');}else toast('열쇠 구멍이 있다.');return}
+if(room===1&&id==='stairs'){room=2;player.x=80;toast('1층으로 올라왔다.');return}
+if(room===2&&id==='portrait'){puzzle('가족사진','사진 뒷면에 적힌 문장: “밤은 낮보다 어둡다.”\n밤을 숫자로 바꾸면? (시계 기준)','12',()=>{flags.photo=true;addItem('사진 조각');say('사진 뒷면이 열리며 조각이 떨어졌다.')});return}
+if(room===3&&id==='books'){puzzle('책장 암호','책등의 색 순서가 무지개에서 첫 번째, 세 번째, 다섯 번째 색이다.\n색의 개수는?','3',()=>{flags.books=true;addItem('황동 열쇠');say('책장이 움직이며 황동 열쇠가 나타났다.')});return}
+if(room===4&&id==='cabinet'){addItem('에너지바');say('찬장 안쪽에서 수상한 에너지바를 찾았다.');return}
+if(room===5&&id==='toy'){puzzle('장난감 상자','상자에 적힌 수수께끼: 다리가 네 개지만 걷지 못하는 것은?','책상',()=>{flags.toy=true;addItem('영원 펜');say('장난감 아래 영원 펜이 숨겨져 있었다.')});return}
+if(room===6&&id==='mirror'){say('거울에 희미한 글씨가 보인다.\n“진실은 위층, 세 번째 방에.”');return}
+if(room===7&&id==='piano'){puzzle('피아노','건반에 새겨진 숫자 1, 1, 2, 3, 5, ?','8',()=>{flags.piano=true;addItem('은색 열쇠');say('피아노 내부에서 은색 열쇠를 찾았다.')});return}
+if(room===8&&id==='diary'){say('살루만의 일지 일부\n“아이들의 공포는 문을 연다. 연구소의 기록을 지하에 숨겼다.”\n\n귀신 아이: “이제 마지막 진실을 찾아줘.”');addItem('일지');return}
+if(room===9&&id==='machine'){puzzle('연구 장치','기록에 적힌 식: 5 × 3 - 4','11',()=>{flags.machine=true;addItem('권총');say('실험 장치가 열리며 특수 권총이 나왔다. 한 발만 남아 있다.')});return}
+if(room===10&&id==='mirror'){say('거울 뒤에서 차가운 금속 소리가 난다.');addItem('지하 열쇠');return}
+if(id==='door'){if(room===2){room=3}else if(room===3){room=4}else if(room===4){room=5}else if(room===5){room=6}else if(room===6){room=7}else if(room===7){room=8}else if(room===8){room=9}else if(room===9){room=10}else if(room===10){if(inventory.includes('지하 열쇠')){say('열쇠가 맞는다. 저택의 지하 깊은 곳으로 이어지는 비밀 통로가 열린다.\n\n귀신 아이: “기록을 찾아. 이곳에서 무슨 일이 있었는지 세상에 알려줘.”',[['엔딩으로',()=>{closeDialog();ending()}]]);}else toast('잠겨 있다. 열쇠가 필요하다.');}else toast('문은 잠겨 있다.');return}
+say(name+'을(를) 조사했다. 특별한 단서는 아직 없다.');
+}
+function ending(){say('진실의 기록\n\n공상 실현 연구소는 사람들의 공포를 이용해 아이들을 납치하고 실험했다. 살루만은 그 비밀을 숨기기 위해 저택을 감옥으로 만들었다.\n\nLuxe는 기록을 품에 안고 새벽의 빗속으로 걸어 나왔다.\n\n— 1장 끝 —',[['처음으로',()=>location.reload()]])}
+function update(){if(!game||dialogOpen)return;let dx=0,dy=0;if(keys.ArrowLeft||keys.a||keys.A)dx--;if(keys.ArrowRight||keys.d||keys.D)dx++;if(keys.ArrowUp||keys.w||keys.W)dy--;if(keys.ArrowDown||keys.s||keys.S)dy++;let len=Math.hypot(dx,dy)||1;player.x=Math.max(55,Math.min(905,player.x+dx/len*player.speed));player.y=Math.max(115,Math.min(470,player.y+dy/len*player.speed));frame++;if(frame%60===0&&mind>0)mind=Math.max(0,mind-(room===0?0:.2));$('mind').textContent=Math.floor(mind);$('hp').textContent='♥'.repeat(hp)+'♡'.repeat(3-hp);$('floor').textContent=rooms[room].name;drawMap()}
+function rect(x,y,w,h,col){ctx.fillStyle=col;ctx.fillRect(x,y,w,h)}
+function draw(){ctx.clearRect(0,0,960,540);let r=rooms[room];rect(0,0,960,540,'#17131e');rect(28,35,904,475,'#514653');rect(38,45,884,455,'#292431');rect(48,55,864,435,'#332c39');
+for(let x=55;x<920;x+=48)for(let y=60;y<490;y+=48){ctx.strokeStyle='#ffffff08';ctx.strokeRect(x,y,48,48)}
+rect(0,0,960,35,'#100d17');rect(0,505,960,35,'#100d17');ctx.fillStyle='#c8b7d6';ctx.font='18px serif';ctx.fillText(r.name,55,27);
+r.objects.forEach(([id,x,y,name])=>{ctx.save();if(id==='door'){rect(x-30,y-65,60,130,'#493044');rect(x-24,y-59,48,118,'#75566c');rect(x+15,y,5,5,'#d7b66e')}else if(id==='rope'){rect(x-35,y-8,70,16,'#b49b83');ctx.strokeStyle='#dfc9a7';ctx.lineWidth=4;ctx.beginPath();ctx.arc(x,y,17,0,Math.PI*2);ctx.stroke()}else if(id==='shelf'||id==='books'){rect(x-48,y-60,96,120,'#50392e');for(let i=0;i<5;i++){rect(x-42+i*18,y-50,13,95,['#79546b','#7c6549','#536d70','#8a6e9a'][i%4])}}else{rect(x-40,y-28,80,56,id==='boiler'?'#59616a':id==='piano'?'#17131b':'#685345');rect(x-34,y-22,68,44,'#00000022')}ctx.fillStyle='#ddd1e4';ctx.font='13px serif';ctx.textAlign='center';ctx.fillText(name,x,y+52);ctx.restore()});
+ // ambient light pool
+ let g=ctx.createRadialGradient(player.x,player.y,5,player.x,player.y,175);g.addColorStop(0,'#d9c6ff20');g.addColorStop(1,'#09071100');ctx.fillStyle=g;ctx.fillRect(0,35,960,470);
+ // player pixel sprite
+ ctx.fillStyle='#15101b';ctx.fillRect(player.x-10,player.y-22,20,30);ctx.fillStyle='#d5b4a4';ctx.fillRect(player.x-8,player.y-34,16,14);ctx.fillStyle='#24202b';ctx.fillRect(player.x-9,player.y-37,18,8);ctx.fillStyle='#a68bc6';ctx.fillRect(player.x-9,player.y-7,18,14);ctx.fillStyle='#c9b9db';ctx.fillRect(player.x-7,player.y+7,5,12);ctx.fillRect(player.x+3,player.y+7,5,12);
+ // ghost hint
+ if(room===0){ctx.globalAlpha=.55+.25*Math.sin(frame/20);ctx.fillStyle='#bba7d9';ctx.fillRect(690,150,18,30);ctx.fillRect(685,145,28,13);ctx.globalAlpha=1}
+ // prompt
+ let nearest=r.objects.map(o=>({o,d:Math.hypot(player.x-o[1],player.y-o[2])})).sort((a,b)=>a.d-b.d)[0];let h=$('hint');if(nearest&&nearest.d<100){h.textContent='F  조사하기 · '+nearest.o[3];h.classList.add('show')}else h.classList.remove('show');
+}
+function drawMap(){mc.clearRect(0,0,100,100);mc.fillStyle='#21172e';mc.fillRect(5,5,90,90);mc.strokeStyle='#8b70a8';mc.strokeRect(8,8,84,84);for(let i=0;i<11;i++){mc.fillStyle=i===room?'#d7b5ff':(i<room?'#896ca5':'#51435e');let x=14+(i%4)*22,y=16+Math.floor(i/4)*25;mc.fillRect(x,y,10,10)}mc.fillStyle='#fff';mc.fillRect(14+(room%4)*22,16+Math.floor(room/4)*25,4,4)}
+function loop(){update();draw();requestAnimationFrame(loop)}loop();
+window.addEventListener('keydown',e=>{if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();keys[e.key]=true;if(e.repeat)return;if(e.key.toLowerCase()==='f')interact();if(e.key.toLowerCase()==='e')showInventory();if(e.key.toLowerCase()==='r')showTools()});
+window.addEventListener('keyup',e=>keys[e.key]=false);
+function showInventory(){let txt='가방 / 단서\n\n'+(inventory.length?inventory.join('\n'):'아직 가진 아이템이 없다.')+'\n\n아이템을 선택하면 사용할 수 있다.';say(txt,[['닫기',closeDialog],['에너지바 사용',()=>{if(inventory.includes('에너지바')){hp=Math.min(3,hp+1);mind=Math.min(100,mind+10);inventory=inventory.filter(x=>x!=='에너지바');toast('체력과 정신력이 회복됐다.')}else toast('에너지바가 없다.');closeDialog()}],['석수 마시기',()=>{if(inventory.includes('석수')){mind=Math.min(100,mind+25);inventory=inventory.filter(x=>x!=='석수');toast('정신력이 회복됐다.')}else toast('석수가 없다.');closeDialog()}]])}
+function showTools(){say('멀티툴 선택\n현재 도구: '+tools[tool]+'\n\nR키를 다시 누르거나 아래에서 도구를 선택하세요.',tools.map((t,i)=>[t,()=>{tool=i;closeDialog();toast('도구 선택: '+t)}]).concat([['닫기',closeDialog]]))}
+$('start').onclick=()=>{game=true;$('overlay').style.display='none';say('Luxe: …여긴 어디지? 손목이 묶여 있어.\n\n[조작 안내]\nWASD / 방향키: 이동\nF: 주변 조사 및 상호작용\nE: 가방·아이템·단서 확인\nR: 멀티툴 도구 선택\n\n가까이 다가가 F를 눌러 주변을 조사하세요. 아이템을 처음 얻으면 사용법을 안내합니다.');};
+document.querySelectorAll('[data-dir]').forEach(b=>{let k={up:'ArrowUp',down:'ArrowDown',left:'ArrowLeft',right:'ArrowRight'}[b.dataset.dir];b.addEventListener('pointerdown',e=>{e.preventDefault();keys[k]=true});['pointerup','pointerleave','pointercancel'].forEach(ev=>b.addEventListener(ev,()=>keys[k]=false))});
+document.querySelectorAll('[data-key]').forEach(b=>b.addEventListener('pointerdown',e=>{e.preventDefault();let k=b.dataset.key;if(k==='f')interact();if(k==='e')showInventory();if(k==='r')showTools()}));
+</script></body></html>
